@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="th" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Sans Thai', sans-serif; overflow: hidden; }
+    
+    .page { display: none; }
+    .page.active { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+
+    /* อนิเมชันตัวอักษรเป็นประกาย */
+    .shimmer-text {
+      background: linear-gradient(90deg, #fb7185, #f43f5e, #fb7185);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+
+    /* อนิเมชันลอยไปมา */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .animate-float { animation: float 3s ease-in-out infinite; }
+
+    /* เอฟเฟกต์หัวใจโปรย */
+    .heart { position: fixed; font-size: 1.5rem; pointer-events: none; z-index: 99; animation: fall linear forwards; }
+    @keyframes fall {
+      to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-rose-50">
+
+  <div id="askPage" class="page active px-4 text-center">
+    <div class="animate-float mb-8">
+      <div class="text-9xl">💝</div>
+    </div>
+    
+    <h1 class="text-5xl md:text-7xl font-extrabold text-rose-600 mb-6 shimmer-text">
+      เป็นแฟนกันไหม?
+    </h1>
+    
+    <p class="text-rose-400 text-xl mb-12">ถ้าเธอตกลง โลกทั้งใบจะกลายเป็นสีชมพูเลยนะ</p>
+
+    <div class="flex flex-col md:flex-row gap-6 items-center justify-center relative w-full max-w-md">
+      <button onclick="acceptLove()" 
+              class="bg-rose-500 hover:bg-rose-600 text-white px-12 py-4 rounded-full text-2xl font-bold shadow-xl transition-transform active:scale-95 z-10">
+        ตกลง ❤️
+      </button>
+      
+      <button id="noBtn" 
+              onmouseover="moveButton()" 
+              onclick="moveButton()"
+              class="bg-white text-rose-300 px-10 py-4 rounded-full text-xl font-semibold border-2 border-rose-100 transition-all duration-100">
+        ไม่...
+      </button>
+    </div>
+  </div>
+
+  <div id="successPage" class="page px-4 text-center">
+    <div class="text-9xl mb-6">🎉</div>
+    <h1 class="text-5xl font-bold text-rose-600 mb-4">เย้! รักที่สุดเลย</h1>
+    <p class="text-rose-400 text-2xl">สัญญาว่าจะดูแลอย่างดีเลยครับ ❤️</p>
+    <div class="mt-8">
+       <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ4ZzBqZzBqZzBqZzBqZzBqZzBqZzBqZzBqZzBqJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/KztT2c4u8mYYUiMKdJ/giphy.gif" 
+            alt="Happy" class="rounded-2xl shadow-lg w-64 mx-auto">
+    </div>
+  </div>
+
+  <script>
+    // ฟังก์ชันย้ายปุ่มหนี (ปุ่ม "ไม่")
+    function moveButton() {
+      const btn = document.getElementById('noBtn');
+      // คำนวณตำแหน่งสุ่ม
+      const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+      
+      btn.style.position = 'fixed';
+      btn.style.left = x + 'px';
+      btn.style.top = y + 'px';
+    }
+
+    // ฟังก์ชันเมื่อกด "ตกลง"
+    function acceptLove() {
+      document.getElementById('askPage').classList.remove('active');
+      document.getElementById('successPage').classList.add('active');
+      startHearts();
+    }
+
+    // ฟังก์ชันสร้างหัวใจโปรยปราย
+    function startHearts() {
+      const symbols = ['❤️', '💖', '🌸', '✨', '🌹'];
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        heart.style.opacity = Math.random();
+        document.body.appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 5000);
+      }, 100);
+    }
+  </script>
+</body>
+</html>
